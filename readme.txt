@@ -30,7 +30,251 @@ After that, the program saves both returned lists as specified (filename_labels.
 -For the translate command, we used the following abstract representation in the output: 
 a list in which the first element is a single predicate (the head) and the second element is 
 another list representing the body in which each element is a predicate of the body. 
-So using this list it already prints the output Horn Clause in the correct format using the display function.
+The predicate was represented as a list with the first element being the name and the following elements being the arguments. 
+This representation follows the output horn clause especification when we display it
+So, when we use the function display to a horn clause that is parsed from the input horn clause, it shows an output horn clause in the correct format
+
+This way, we don`t need a new function to read the result of parsed input horn clause and print out it in the right way, because the structure is already in the right way
+
+Trials:
+All the trials worked as expected for the following files:
+-input_horn_clauses.dat:
+cos ( x ) :- sen ( x )
+invalid ( ) :- q
+valid ( )
+invalid ( ) :- q ( ) ^
+exec ( x ,    y ) :- q ( 2 ) ^ r ( 4 ) ^ p ( a , b , c )
+invalid ( x 
+invalid ( x ) :-
+test ( 1 , 2 , 3 )
+invalid
+ancestor ( x , y ) :- parent ( x , z ) ^ ancestor ( z , y )
+ancestor ( x , y ) ^ other ( x ) :- parent ( x , z ) ^ ancestor ( z , y )
+cos(x):-sen(x)
+invalid():-q
+valid()
+invalid():-q()^
+exec(x,y):-q(2)^r(4)^p(a,b,c)
+invalid(x
+invalid(x):-
+test(1,2,3)
+invalid
+ancestor(x,y):-parent(x,z)^ancestor(z,y)
+ancestor(x,y)^other(x):-parent(x,z)^ancestor(z,y)
+
+-data.dat:
+
+-repository.rep:
+input_horn_clauses.dat
+
+Test Cases:
+
+[jfn1@shell lab1]$ ./dbmgr process input_horn_clauses.dat within repository.rep 
+The data file 'input_horn_clauses.dat' was processed, generating the files 'input_horn_clauses_labels.dat' and 'input_horn_clauses_numbers.dat'
+
+The content of the generated files are:
+-input_horn_clauses_labels.dat:
+cos
+sen
+valid
+exec
+q
+r
+p
+a
+b
+c
+test
+invalid
+other
+parent
+x
+ancestor
+z
+y
+
+-input_horn_clauses_numbers.dat:
+4
+1
+2
+3
+
+This is the expected behavior. All the labels were read and written in the labels file without repetition and the same occurred for the numbers
+
+[jfn1@shell lab1]$ ./dbmgr translate input_horn_clauses.dat into output_horn_clauses.dat within repository.rep
+The data file 'input_horn_clauses.dat' was translated into the dat file 'output_horn_clauses.dat'
+
+The content of the generated file is:
+-output_horn_clauses.dat:
+((cos x) ((sen x)))
+((valid))
+((exec x y) ((q 2) (r 4) (p a b c)))
+((test 1 2 3))
+((ancestor x y) ((parent x z) (ancestor z y)))
+((cos x) ((sen x)))
+((valid))
+((exec x y) ((q 2) (r 4) (p a b c)))
+((test 1 2 3))
+((ancestor x y) ((parent x z) (ancestor z y)))
+
+This is the correct behavior. All lines that were parsed as an input horn clause were successfully translated into output horn clause, as specified in the EBNFs
+
+
+The following test cases are for invalid configurations.
+All explanations for the behavior of the program are in the output 
+
+[jfn1@shell lab1]$ ./dbmgr process 
+Error: Bad formed parameters
+Usage information:
+    ./dbmgr lookup <dat1> in <rep1>
+    ./dbmgr print <dat1> of <rep1>
+    ./dbmgr register <dat1> with <rep1>
+    ./dbmgr remove <dat1> from <rep1>
+    ./dbmgr list <rep1>
+    ./dbmgr duplicate <dat1> to <dat2> within <rep1>
+    ./dbmgr process <dat1> within <rep1>
+    ./dbmgr translate <dat1> into <dat2> within <rep1>
+
+[jfn1@shell lab1]$ ./dbmgr process input_horn_clauses.txt within repository.rep
+The file 'input_horn_clauses.txt' doesn't have the expected extension
+Error: Bad formed parameters
+Usage information:
+    ./dbmgr lookup <dat1> in <rep1>
+    ./dbmgr print <dat1> of <rep1>
+    ./dbmgr register <dat1> with <rep1>
+    ./dbmgr remove <dat1> from <rep1>
+    ./dbmgr list <rep1>
+    ./dbmgr duplicate <dat1> to <dat2> within <rep1>
+    ./dbmgr process <dat1> within <rep1>
+    ./dbmgr translate <dat1> into <dat2> within <rep1>
+
+[jfn1@shell lab1]$ ./dbmgr process input_horn_clauses.dat within repository.txt
+The file 'repository.txt' doesn't have the expected extension
+Error: Bad formed parameters
+Usage information:
+    ./dbmgr lookup <dat1> in <rep1>
+    ./dbmgr print <dat1> of <rep1>
+    ./dbmgr register <dat1> with <rep1>
+    ./dbmgr remove <dat1> from <rep1>
+    ./dbmgr list <rep1>
+    ./dbmgr duplicate <dat1> to <dat2> within <rep1>
+    ./dbmgr process <dat1> within <rep1>
+    ./dbmgr translate <dat1> into <dat2> within <rep1>
+
+[jfn1@shell lab1]$ ./dbmgr process a.dat within repository.rep 
+The file 'a.dat' doesn't exist
+
+[jfn1@shell lab1]$ ./dbmgr process data.dat within repository.rep
+The data file 'data.dat' is NOT listed in the repository file 'repository.rep'
+
+[jfn1@shell lab1]$ ./dbmgr translate
+Error: Bad formed parameters
+Usage information:
+    ./dbmgr lookup <dat1> in <rep1>
+    ./dbmgr print <dat1> of <rep1>
+    ./dbmgr register <dat1> with <rep1>
+    ./dbmgr remove <dat1> from <rep1>
+    ./dbmgr list <rep1>
+    ./dbmgr duplicate <dat1> to <dat2> within <rep1>
+    ./dbmgr process <dat1> within <rep1>
+    ./dbmgr translate <dat1> into <dat2> within <rep1>
+
+	
+[jfn1@shell lab1]$ ./dbmgr translate input_horn_clauses.txt into output_horn_clauses.dat within repository.rep
+The file 'input_horn_clauses.txt' doesn't have the expected extension
+Error: Bad formed parameters
+Usage information:
+    ./dbmgr lookup <dat1> in <rep1>
+    ./dbmgr print <dat1> of <rep1>
+    ./dbmgr register <dat1> with <rep1>
+    ./dbmgr remove <dat1> from <rep1>
+    ./dbmgr list <rep1>
+    ./dbmgr duplicate <dat1> to <dat2> within <rep1>
+    ./dbmgr process <dat1> within <rep1>
+    ./dbmgr translate <dat1> into <dat2> within <rep1>
+	
+[jfn1@shell lab1]$ ./dbmgr translate input_horn_clauses.dat into output_horn_clauses.txt within repository.rep
+The file 'output_horn_clauses.txt' doesn't have the expected extension
+Error: Bad formed parameters
+Usage information:
+    ./dbmgr lookup <dat1> in <rep1>
+    ./dbmgr print <dat1> of <rep1>
+    ./dbmgr register <dat1> with <rep1>
+    ./dbmgr remove <dat1> from <rep1>
+    ./dbmgr list <rep1>
+    ./dbmgr duplicate <dat1> to <dat2> within <rep1>
+    ./dbmgr process <dat1> within <rep1>
+    ./dbmgr translate <dat1> into <dat2> within <rep1>
+
+[jfn1@shell lab1]$ ./dbmgr translate input_horn_clauses.dat into output_horn_clauses.dat within repository.txt
+The file 'repository.txt' doesn't have the expected extension
+Error: Bad formed parameters
+Usage information:
+    ./dbmgr lookup <dat1> in <rep1>
+    ./dbmgr print <dat1> of <rep1>
+    ./dbmgr register <dat1> with <rep1>
+    ./dbmgr remove <dat1> from <rep1>
+    ./dbmgr list <rep1>
+    ./dbmgr duplicate <dat1> to <dat2> within <rep1>
+    ./dbmgr process <dat1> within <rep1>
+    ./dbmgr translate <dat1> into <dat2> within <rep1>
+	
+[jfn1@shell lab1]$ ./dbmgr translate doesnt_exist.dat into output_horn_clauses.dat within repository.rep
+The file 'doesnt_exist.dat' doesn't exist
+
+[jfn1@shell lab1]$ ./dbmgr translate data.dat into output_horn_clauses.dat within repository.rep
+The data file 'data.dat' is NOT listed in the repository file 'repository.rep'
+
+[jfn1@shell lab1]$ ./dbmgr translate input_horn_clauses.dat into output_horn_clauses.dat within doesnt_exist.rep
+The file 'doesnt_exist.rep' already exists
+ 
+-----
+
+Extra Credit:
+
+For the input horn clause grammar, the head definition were changed:
+  head -> predicate
+became
+  head -> predicate {AND predicate}
+allowing more than one predicate in the head
+
+For the output horn clause grammar, the head definition were also changed to allow more than one predicate:
+  head -> predicate
+became
+  head -> LEFTPAREN predicate {predicate} RIGHTPAREN
+  
+Since we are using the scheme lists to display the output horn clause without any posterior parsing, 
+we just change the head? function to instead of parsing just one predicate and return a predicate, parse a 
+list of predicates in the new input syntax and return that list (that matches the new output syntax)
+
+Test case:
+Using the same input files:
+
+[jfn1@shell extra]$ ./dbmgr translate input_horn_clauses.dat into output_horn_clauses.dat within repository.rep
+The data file 'input_horn_clauses.dat' was translated into the dat file 'output_horn_clauses.dat'
+
+The content of the generated file is:
+-output_horn_clauses.dat:
+(((cos x)) ((sen x)))
+(((valid)))
+(((exec x y)) ((q 2) (r 4) (p a b c)))
+(((test 1 2 3)))
+(((ancestor x y)) ((parent x z) (ancestor z y)))
+(((ancestor x y) (other x)) ((parent x z) (ancestor z y)))
+(((cos x)) ((sen x)))
+(((valid)))
+(((exec x y)) ((q 2) (r 4) (p a b c)))
+(((test 1 2 3)))
+(((ancestor x y)) ((parent x z) (ancestor z y)))
+(((ancestor x y) (other x)) ((parent x z) (ancestor z y)))
+
+This is the correct behavior.
+All lines that were parsed as a modified input horn clause were successfully translated into the modified output horn clause
+
+
+
+
+
 
 
 
