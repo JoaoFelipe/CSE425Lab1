@@ -109,7 +109,7 @@
 
 ; This function checks if a list has a valid input horn clause and returns a list with 3 elements:
 ; 1- tells whether it is a valid horn clause or not
-; 2- head list
+; 2- head 
 ; 3- body list
 (define hornclause? (lambda (lis state)
 	(cond
@@ -151,30 +151,10 @@
 
 ; This function checks if a list has a valid head and returns a list with 3 elements:
 ; 1- tells whether it is a valid head or not
-; 2- list of predicate
+; 2- predicate
 ; 3- tail of list
 (define head? (lambda (lis state)
 	(predicate? lis 0)
-	;(cond
-	;	((and (null? lis) (= state 1)) (list #t '() '()))
-	;	((and (SEPARATOR? (car lis)) (= state 1)) (list #t '() lis))
-	;	((or (= state 0) (= state 2)) 
-	;		(let ((predicate-result (predicate? lis 0)))
-	;			(if (not (car predicate-result)) 
-	;				(list #f '() '())
-	;				(let ((result (head? (caddr predicate-result) 1)))
-	;					(list (car result) (cons (cadr predicate-result) (cadr result)) (caddr result))
-	;				)
-	;			)
-	;		)
-	;	)
-	;	((and (= state 1) (AND? (car lis))) 
-	;		(head? (cdr lis) 2)
-	;	)
-	;	(else
-	;		(list #f '() '())
-	;	)
-	;)
 ))
 
 ; This function checks if a list has a valid body and returns a list with 3 elements:

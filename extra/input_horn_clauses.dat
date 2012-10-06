@@ -1,0 +1,22 @@
+cos ( x ) :- sen ( x )
+invalid ( ) :- q
+valid ( )
+invalid ( ) :- q ( ) ^
+exec ( x ,    y ) :- q ( 2 ) ^ r ( 4 ) ^ p ( a , b , c )
+invalid ( x 
+invalid ( x ) :-
+test ( 1 , 2 , 3 )
+invalid
+ancestor ( x , y ) :- parent ( x , z ) ^ ancestor ( z , y )
+ancestor ( x , y ) ^ other ( x ) :- parent ( x , z ) ^ ancestor ( z , y )
+cos(x):-sen(x)
+invalid():-q
+valid()
+invalid():-q()^
+exec(x,y):-q(2)^r(4)^p(a,b,c)
+invalid(x
+invalid(x):-
+test(1,2,3)
+invalid
+ancestor(x,y):-parent(x,z)^ancestor(z,y)
+ancestor(x,y)^other(x):-parent(x,z)^ancestor(z,y)
