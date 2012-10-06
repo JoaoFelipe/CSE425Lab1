@@ -3,11 +3,6 @@
 ; Joao Felipe Nicolaci Pimentel
 ; This file has the functions that parses the command line 
 
-; macro defined to check wether something is already bounded
-(define-macro (bound? x)
- `(with-exception-handler
-    (lambda (e) #f)
-    (lambda () (and ,x #t))))
 
 (include "dbmainfunc.scm")
 
