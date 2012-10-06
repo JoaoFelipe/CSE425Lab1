@@ -1,0 +1,33 @@
+Trials:
+All the trials worked as expected for the following files:
+-input_horn_clauses.dat:
+cos ( x ) :- sen ( x )
+invalid ( ) :- q
+valid ( )
+invalid ( ) :- q ( ) ^
+exec ( x , y ) :- q ( 2 ) ^ r ( 4 ) ^ p ( a , b , c )
+invalid ( x 
+invalid ( x ) :-
+test ( 1 , 2 , 3 )
+invalid
+ancestor ( x , y ) :- parent ( x , z ) ^ ancestor ( z , y )
+ancestor ( x , y ) ^ other ( x ) :- parent ( x , z ) ^ ancestor ( z , y )
+cos(x):-sen(x)
+invalid():-q
+valid()
+invalid():-q()^
+exec(x,y):-q(2)^r(4)^p(a,b,c)
+invalid(x
+invalid(x):-
+test(1,2,3)
+invalid
+ancestor(x,y):-parent(x,z)^ancestor(z,y)
+ancestor(x,y)^other(x):-parent(x,z)^ancestor(z,y)
+
+-data.dat:
+
+-repository.rep:
+input_horn_clauses.dat
+
+[jfn1@shell lab1]$ ./dbmgr process a.dat within repository.rep 
+The file 'a.dat' doesn't exist

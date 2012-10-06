@@ -99,17 +99,20 @@
 ; Command-line usage: ./dbmgr process <dat> within <rep>
 (define fn-process (lambda (dat rep)
 	(if (find-in-file dat (open-input-file rep))
-		(begin
-			; read tokens from dat
-			; process tokens in two lists
-			(let ((lists (separate-tokens (file-to-list (open-input-file dat)))))
-				(begin
-					; save lists to files
-					(list-to-file (open-output-file (file-name dat "labels")) (car lists))
-					(list-to-file (open-output-file (file-name dat "numbers")) (cadr lists))
-				)
+		; read tokens from dat
+		; process tokens in two lists
+		(let 
+			(
+				(lists (separate-tokens (file-to-list (open-input-file dat))))
+				(labels_dat (file-name dat "labels"))
+				(numbers_dat (file-name dat "numbers"))
 			)
-			(display (string-append "The data file '" dat "' was processed from the repository file '" rep "'"))
+			(begin
+				; save lists to files
+				(list-to-file (open-output-file labels_dat) (car lists))
+				(list-to-file (open-output-file numbers_dat) (cadr lists))
+				(display (string-append "The data file '" dat "' was processed, generating the files '" labels_dat "' and '" numbers_dat "'"))
+			)
 		)
 		(display (string-append "The data file '" dat "' is NOT listed in the repository file '" rep "'"))
 	)
